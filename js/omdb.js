@@ -5,7 +5,7 @@
 import { KEYS, read, write } from "./storage.js";
 import { normalize, isNA } from "./utils.js";
 
-export const OMDB_API_KEY = ""; // Set your OMDb API key here
+export const OMDB_API_KEY = "21021edc";
 
 export async function fetchOmdbByTitleYear(title, year) {
   const t = String(title || "").trim();

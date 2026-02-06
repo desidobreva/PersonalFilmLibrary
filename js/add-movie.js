@@ -7,10 +7,9 @@ import {
   setUserMovies, 
   nextUserMovieId, 
   dispatchMoviesChanged, 
-  MOVIES_URL 
 } from "./movies.js";
 import { normalize, isNA, parseRuntimeMin, releasedToISO } from "./utils.js";
-import { fetchOmdbByTitleYear, OMDB_API_KEY } from "./omdb.js";
+import { fetchOmdbByTitleYear } from "./omdb.js";
 
 // Elements (must exist in catalog.html)
 const openBtn = document.getElementById("openAddMovieBtn");

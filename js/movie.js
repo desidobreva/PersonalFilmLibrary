@@ -1,9 +1,9 @@
 import { KEYS, read, getCurrentUser } from "./storage.js";
 import { notify } from "./notify.js";
 import { getMovieComments, addMovieComment } from "./comments.js";
-
-const MOVIES_URL = "assets/data/movies.json";
-const OMDB_API_KEY = "21021edc";
+import { getUserMovies } from "./movies.js";
+import { normalize } from "./utils.js";
+import { fetchOmdbByTitleYear } from "./omdb.js";
 
 const titleEl = document.getElementById("movieTitle");
 const metaEl = document.getElementById("movieMeta");
@@ -34,53 +34,11 @@ function getFrom() {
   return (getParam("from") || "").toLowerCase();
 }
 
-function normalize(str) {
-  return String(str || "").trim();
-}
-
 function formatDateISO(d = new Date()) {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
-}
-
-async function loadBaseMovies() {
-  const res = await fetch(MOVIES_URL, { cache: "no-store" });
-  if (!res.ok) throw new Error("Cannot load movies.json");
-  const data = await res.json();
-  if (!Array.isArray(data)) throw new Error("movies.json must be an array");
-
-  return data.map(x => ({
-    id: Number(x.id),
-    title: String(x.title),
-    year: Number(x.year),
-    rating: x.rating ?? "",
-    durationMin: x.durationMin ?? "",
-    releaseDate: x.releaseDate ?? "",
-    director: x.director ?? "",
-    source: "base"
-  }));
-}
-
-function getUserMovies(userId) {
-  const map = read(KEYS.USER_MOVIES, {});
-  return map[userId] || [];
-}
-
-async function fetchOmdb(title, year) {
-  if (!OMDB_API_KEY) return null;
-
-  const url =
-    `https://www.omdbapi.com/?apikey=${encodeURIComponent(OMDB_API_KEY)}` +
-    `&t=${encodeURIComponent(title)}&y=${encodeURIComponent(year)}`;
-
-  const res = await fetch(url);
-  if (!res.ok) return null;
-
-  const data = await res.json();
-  if (data.Response !== "True") return null;
-  return data;
 }
 
 function setPoster(url, alt) {
@@ -247,7 +205,7 @@ async function init() {
 
   if (titleEl) titleEl.textContent = movie.title;
 
-  const omdb = await fetchOmdb(movie.title, movie.year);
+  const omdb = await fetchOmdbByTitleYear(movie.title, movie.year);
 
   if (omdb) {
     setPoster(omdb.Poster, `${movie.title} poster`);

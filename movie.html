@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PFL | Movie</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Personal Film Library home">
+        <span class="brand-badge">PFL</span>
+        <span class="brand-title">Personal Film Library</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="catalog.html">Catalog</a>
+        <a href="favorites.html">Favorites</a>
+        <a href="watched.html">Watched</a>
+      </nav>
+
+      <div class="header-actions">
+        <span id="userEmail" class="user-email"></span>
+        <a href="#" id="logoutBtn" class="btn ghost">Logout</a>
+        <a class="btn ghost" href="login.html" id="accountLink">Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container grid-2">
+        <article class="card">
+            <div class="card-inner">
+                <h1 class="details-title" id="movieTitle">Loading...</h1>
+
+                <div class="details-layout">
+                <div class="details-poster">
+                    <div class="poster-box" id="moviePoster">
+                    <div class="poster-fallback">Poster</div>
+                    </div>
+                </div>
+
+                <div class="details-info">
+                    <div class="details-meta" id="movieMeta"></div>
+
+                    <hr class="hr" />
+
+                    <div class="row">
+                    <a class="btn ghost" href="#" id="backBtn">Back</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </article>
+
+
+      <aside class="card" id="commentPanel">
+        <div class="card-inner">
+          <h2 class="section-title">Add comment</h2>
+
+          <form id="commentForm" class="form-grid" novalidate>
+            <div class="field">
+              <label for="cAuthor">Author</label>
+              <input id="cAuthor" name="author" required readonly />
+              <div class="error" id="cAuthorError" aria-live="polite"></div>
+            </div>
+
+            <div class="field">
+              <label for="cText">Comment (max 200)</label>
+              <textarea id="cText" name="text" maxlength="200" required></textarea>
+              <div class="help"><span id="charCount">0</span>/200</div>
+              <div class="error" id="cTextError" aria-live="polite"></div>
+            </div>
+
+            <button class="btn primary" type="submit">Save</button>
+          </form>
+        </div>
+      </aside>
+    </div>
+
+    <section class="container card mt-14" aria-label="Comments">
+      <div class="card-inner">
+        <h2 class="section-title">Comments</h2>
+        <ul class="comments-list" id="commentsList">
+          
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Personal Film Library 2026</div>
+  </footer>
+  <script type="module" src="js/header.js"></script>
+  <script type="module" src="js/movie.js"></script>
+</body>
+</html>

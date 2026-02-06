@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "year": 2010,
+    "rating": 8.8,
+    "durationMin": 148,
+    "releaseDate": "2010-07-16",
+    "director": "Christopher Nolan",
+    "poster": "inception.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Interstellar",
+    "year": 2014,
+    "rating": 8.7,
+    "durationMin": 169,
+    "releaseDate": "2014-11-07",
+    "director": "Christopher Nolan",
+    "poster": "interstellar.jpg"
+  },
+  {
+    "id": 3,
+    "title": "The Dark Knight",
+    "year": 2008,
+    "rating": 9,
+    "durationMin": 152,
+    "releaseDate": "2008-07-18",
+    "director": "Christopher Nolan",
+    "poster": "the_dark_knight.jpg"
+  },
+  {
+    "id": 4,
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "rating": 9.3,
+    "durationMin": 142,
+    "releaseDate": "1994-09-23",
+    "director": "Frank Darabont",
+    "poster": "the_shawshank_redemption.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Pulp Fiction",
+    "year": 1994,
+    "rating": 8.9,
+    "durationMin": 154,
+    "releaseDate": "1994-10-14",
+    "director": "Quentin Tarantino",
+    "poster": "pulp_fiction.jpg"
+  },
+  {
+    "id": 6,
+    "title": "The Matrix",
+    "year": 1999,
+    "rating": 8.7,
+    "durationMin": 136,
+    "releaseDate": "1999-03-31",
+    "director": "The Wachowskis",
+    "poster": "the_matrix.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Fight Club",
+    "year": 1999,
+    "rating": 8.8,
+    "durationMin": 139,
+    "releaseDate": "1999-10-15",
+    "director": "David Fincher",
+    "poster": "fight_club.jpg"
+  },
+  {
+    "id": 8,
+    "title": "Forrest Gump",
+    "year": 1994,
+    "rating": 8.8,
+    "durationMin": 142,
+    "releaseDate": "1994-07-06",
+    "director": "Robert Zemeckis",
+    "poster": "forrest_gump.jpg"
+  }
+]

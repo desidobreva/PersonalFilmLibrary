@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PFL | Watched</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="catalog.html" aria-label="Personal Film Library home">
+        <span class="brand-badge">PFL</span>
+        <span class="brand-title">Personal Film Library</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="catalog.html">Catalog</a>
+        <a href="favorites.html">Favorites</a>
+        <a href="watched.html" aria-current="page">Watched</a>
+      </nav>
+
+      <div class="header-actions">
+        <span id="userEmail" class="user-email"></span>
+        <a href="#" id="logoutBtn" class="btn ghost">Logout</a>
+        <a class="btn ghost" href="login.html" id="accountLink">Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+
+      <section class="toolbar" aria-label="Watched tools">
+        <div class="toolbar-left">
+          <h1 class="section-title">Watched</h1>
+
+          <div class="field">
+            <label for="watchedSearch">Search</label>
+            <input id="watchedSearch" type="search" placeholder="Search watched..." />
+          </div>
+        </div>
+
+        <div class="row">
+          <button class="btn danger" type="button" id="clearWatchedBtn">Clear watched</button>
+        </div>
+      </section>
+
+      <section class="movies-grid" id="moviesContainer" aria-label="Watched movies"></section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Personal Film Library 2026</div>
+  </footer>
+
+  <script type="module" src="js/header.js"></script>
+  <script type="module" src="js/auth-guard.js"></script>
+  <script type="module" src="js/watched.js"></script>
+</body>
+</html>

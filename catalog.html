@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PFL | Catalog</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Personal Film Library home">
+        <span class="brand-badge">PFL</span>
+        <span class="brand-title">Personal Film Library</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="catalog.html" aria-current="page">Catalog</a>
+        <a href="favorites.html">Favorites</a>
+        <a href="watched.html">Watched</a>
+      </nav>
+
+      <div class="header-actions">
+        <span id="userEmail" class="user-email"></span>
+        <a href="#" id="logoutBtn" class="btn ghost">Logout</a>
+        <a class="btn ghost" href="login.html" id="accountLink">Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="toolbar" aria-label="Catalog tools">
+        <div class="toolbar-left">
+          <div class="field">
+            <label for="search">Search</label>
+            <input id="searchInput" type="search" placeholder="Search titles..." />
+          </div>
+
+          <div class="field sort-field">
+            <label for="sortBy">Sort</label>
+            <select id="sortBy">
+              <option value="title">Title</option>
+              <option value="rating">Rating</option>
+              <option value="releaseDate">Release date</option>
+              <option value="duration">Duration</option>
+            </select>
+
+            <button class="btn" type="button" id="toggleTitleBtn">Title: A → Z</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <button class="btn primary" type="button" id="openAddMovieBtn">Add movie</button>
+        </div>
+      </section>
+
+      <section class="card mt-14" id="addMoviePanel" hidden>
+        <div class="card-inner">
+            <h2 class="section-title">Add a new movie</h2>
+
+            <form id="addMovieForm" class="form-grid" novalidate>
+            <div class="field">
+                <label for="amTitle">Title</label>
+                <input id="amTitle" required />
+            </div>
+
+            <div class="field">
+                <label for="amYear">Year</label>
+                <input id="amYear" type="number" min="1880" max="2100" required />
+            </div>
+
+            <div class="field">
+                <label for="amRuntime">Duration (minutes)</label>
+                <input id="amRuntime" type="number" min="1" required />
+            </div>
+
+            <div class="field">
+                <label for="amRelease">Release date</label>
+                <input id="amRelease" type="date" required />
+            </div>
+
+            <div class="field">
+                <label for="amRating">Rating (0 - 10)</label>
+                <input id="amRating" type="number" min="0" max="10" step="0.1" required />
+            </div>
+
+            <div class="field">
+                <label for="amDirector">Director</label>
+                <input id="amDirector" required />
+            </div>
+
+            <div class="row">
+                <button class="btn primary" type="submit">Add</button>
+                <button class="btn" type="button" id="cancelAddMovieBtn">Cancel</button>
+            </div>
+            </form>
+        </div>
+      </section>
+
+      <section class="movies-grid" id="moviesContainer" aria-label="Movies"></section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Personal Film Library 2026</div>
+  </footer>
+
+  <script type="module" src="js/header.js"></script>
+  <script type="module" src="js/catalog.js"></script>
+  <script type="module" src="js/add-movie.js"></script>
+</body>
+</html>

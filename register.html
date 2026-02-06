@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PFL | Create account</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Personal Film Library home">
+        <span class="brand-badge">PFL</span>
+        <span class="brand-title">Personal Film Library</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="catalog.html">Catalog</a>
+        <a href="favorites.html">Favorites</a>
+        <a href="watched.html">Watched</a>
+      </nav>
+
+      <div class="header-actions">
+        <span id="userEmail" class="user-email"></span>
+        <a href="#" id="logoutBtn" class="btn ghost">Logout</a>
+        <a class="btn ghost" href="login.html" id="accountLink">Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container auth-shell">
+      <section aria-label="Create account">
+        <h1 class="hero-title">Create your account.</h1>
+        <p class="hero-sub">Start building your personal film library.</p>
+      </section>
+
+      <section class="card" aria-label="Register form">
+        <div class="card-inner">
+          <h2 class="section-title">Create account</h2>
+
+          <form id="registerForm" class="form-grid" novalidate>
+            <div class="field">
+              <label for="regEmail">Email</label>
+              <input id="regEmail" name="email" type="email" autocomplete="email" />
+              <div class="error" id="regEmailError" aria-live="polite"></div>
+            </div>
+
+            <div class="field">
+              <label for="regPass">Password</label>
+              <input id="regPass" name="password" type="password" autocomplete="new-password" />
+              <div class="help">Use at least 6 characters.</div>
+              <div class="error" id="regPassError" aria-live="polite"></div>
+            </div>
+
+            <div class="field">
+              <label for="regPass2">Confirm password</label>
+              <input id="regPass2" name="confirmPassword" type="password" autocomplete="new-password" />
+              <div class="error" id="regPass2Error" aria-live="polite"></div>
+            </div>
+
+            <button class="btn primary" type="submit">Create account</button>
+
+            <hr class="hr" />
+
+            <p class="help">
+              Already have an account? <a class="link" href="login.html">Sign in</a>
+            </p>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Personal Film Library 2026</div>
+  </footer>
+
+  <script type="module" src="js/header.js"></script>
+  <script type="module" src="js/register.js"></script>
+</body>
+</html>

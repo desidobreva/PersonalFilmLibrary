@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <rect x="6" y="14" width="52" height="36" rx="10" fill="#f5c518"/>
+  <text x="32" y="39"
+        font-family="Arial, sans-serif"
+        font-size="18"
+        font-weight="900"
+        text-anchor="middle"
+        fill="#111">PFL</text>
+</svg>

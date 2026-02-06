@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Film Library</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Personal Film Library home">
+        <span class="brand-badge">PFL</span>
+        <span class="brand-title">Personal Film Library</span>
+      </a>
+
+      <div class="header-actions">
+        <span id="userEmail" class="user-email"></span>
+        <a href="#" id="logoutBtn" class="btn ghost">Logout</a>
+        <a class="btn ghost" href="login.html" id="accountLink">Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container hero">
+      <section aria-label="Intro">
+        <h1 class="hero-title">Your personal movie library.</h1>
+        <p class="hero-sub">
+          Track favorites, mark watched titles, and leave short comments for every movie.
+        </p>
+
+        <div class="row mt-18" aria-label="Quick actions">
+          <a class="btn primary" href="login.html">Sign in</a>
+          <a class="btn" href="register.html">Create account</a>
+          <a class="btn ghost" href="catalog.html">Browse catalog</a>
+        </div>
+      </section>
+
+      <aside class="card hero-card" aria-label="Highlights">
+        <div class="card-inner">
+          <h2 class="section-title">Highlights</h2>
+          <hr class="hr" />
+          <ul class="features">
+            <li>⭐ Build your favorites list</li>
+            <li>✅ Keep a watched history</li>
+            <li>💬 Save short comments per title</li>
+            <li>➕ Add your own movies</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Personal Film Library 2026</div>
+  </footer>
+  <script type="module" src="js/header.js"></script>
+</body>
+</html>

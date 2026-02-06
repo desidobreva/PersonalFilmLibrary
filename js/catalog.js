@@ -1,7 +1,18 @@
-import { KEYS, read, write, requireAuth, getCurrentUser } from "./storage.js";
+import { requireAuth, getCurrentUser } from "./storage.js";
 import { notify } from "./notify.js";
-
-const MOVIES_URL = "assets/data/movies.json";
+import { 
+  loadBaseMoviesOnce, 
+  getUserMovies, 
+  setUserMovies, 
+  getFavorites, 
+  setFavorites, 
+  getWatched, 
+  setWatched, 
+  isIn, 
+  dispatchMoviesChanged 
+} from "./movies.js";
+import { deleteMovieComments } from "./comments.js";
+import { normalize, safeNumber } from "./utils.js";
 
 const moviesContainer = document.getElementById("moviesContainer");
 const sortSelect = document.getElementById("sortBy");
@@ -9,8 +20,6 @@ const toggleTitleBtn = document.getElementById("toggleTitleBtn");
 const searchInput = document.getElementById("searchInput");
 
 let sortDir = "asc"; 
-
-let baseMoviesCache = null;
 
 const CATALOG_STATE_KEY = "pfl:catalogState";
 
@@ -44,77 +53,6 @@ function applyCatalogState(state) {
   updateSortToggleLabel();
 }
 
-function normalize(str) {
-  return String(str || "").trim().toLowerCase();
-}
-
-function safeNumber(x, fallback = 0) {
-  const n = Number(x);
-  return Number.isFinite(n) ? n : fallback;
-}
-
-async function loadBaseMovies() {
-  const res = await fetch(MOVIES_URL, { cache: "no-store" });
-  if (!res.ok) throw new Error("Cannot load movies.json");
-  const data = await res.json();
-  if (!Array.isArray(data)) throw new Error("movies.json must be an array");
-
-  return data.map(x => ({
-    id: Number(x.id),
-    title: String(x.title),
-    year: Number(x.year),
-    rating: x.rating ?? "",
-    durationMin: x.durationMin ?? "",
-    releaseDate: x.releaseDate ?? "",
-    director: x.director ?? "",
-    poster: x.poster ?? "",
-    source: "base"
-  }));
-}
-
-async function loadBaseMoviesOnce() {
-  if (baseMoviesCache) return baseMoviesCache;
-  baseMoviesCache = await loadBaseMovies();
-  return baseMoviesCache;
-}
-
-function getUserMovies(userId) {
-  const map = read(KEYS.USER_MOVIES, {});
-  return map[userId] || [];
-}
-
-function setUserMovies(userId, movies) {
-  const map = read(KEYS.USER_MOVIES, {});
-  map[userId] = movies;
-  write(KEYS.USER_MOVIES, map);
-}
-
-function getFavorites(userId) {
-  const map = read(KEYS.FAVORITES, {});
-  return map[userId] || [];
-}
-
-function setFavorites(userId, list) {
-  const map = read(KEYS.FAVORITES, {});
-  map[userId] = list;
-  write(KEYS.FAVORITES, map);
-}
-
-function getWatched(userId) {
-  const map = read(KEYS.WATCHED, {});
-  return map[userId] || [];
-}
-
-function setWatched(userId, list) {
-  const map = read(KEYS.WATCHED, {});
-  map[userId] = list;
-  write(KEYS.WATCHED, map);
-}
-
-function isIn(list, movieId) {
-  return list.includes(movieId);
-}
-
 function updateSortToggleLabel() {
   if (!toggleTitleBtn || !sortSelect) return;
 
@@ -138,18 +76,23 @@ function createPosterEl(movie) {
   const wrap = document.createElement("div");
   wrap.className = "poster";
 
-  if (movie?.source === "user") {
-    wrap.innerHTML = `<div class="poster-fallback">No poster</div>`;
-    return wrap;
-  }
-
   if (movie?.poster) {
     const img = document.createElement("img");
-    img.src = `assets/img/posters/${movie.poster}`;
+    
+    // Check if poster is a URL (from OMDb) or local file path
+    if (String(movie.poster).startsWith("http")) {
+      img.src = movie.poster;  // OMDb URL
+      console.log(`Loading OMDb poster for "${movie.title}":`, movie.poster);
+    } else {
+      img.src = `assets/img/posters/${movie.poster}`;  // Local file
+      console.log(`Loading local poster for "${movie.title}":`, movie.poster);
+    }
+    
     img.alt = `${movie.title} poster`;
     img.loading = "lazy";
 
     img.addEventListener("error", () => {
+      console.error(`Failed to load poster for "${movie.title}":`, img.src);
       wrap.innerHTML = `<div class="poster-fallback">No poster</div>`;
     });
 
@@ -157,7 +100,7 @@ function createPosterEl(movie) {
     return wrap;
   }
 
-  wrap.innerHTML = `<div class="poster-fallback">Poster</div>`;
+  wrap.innerHTML = `<div class="poster-fallback">No poster</div>`;
   return wrap;
 }
 
@@ -211,7 +154,7 @@ function createMovieCard(movie, options) {
       const removeBtn = document.createElement("button");
       removeBtn.className = "btn danger";
       removeBtn.textContent = "Remove";
-      removeBtn.addEventListener("click", () => options.onRemoveUserMovie(movie.id));
+      removeBtn.addEventListener("click", () => options.onRemoveUserMovie(movie));
       row.appendChild(removeBtn);
     }
   }
@@ -313,16 +256,31 @@ async function init() {
       notify("Marked as Watched!");
     },
 
-    onRemoveUserMovie: (movieId) => {
+    onRemoveUserMovie: (movie) => {
       const u = requireAuth();
       if (!u) return;
 
+      // Remove from user movies
       const list = getUserMovies(u.id);
-      const next = list.filter(x => Number(x.id) !== Number(movieId));
+      const next = list.filter(x => Number(x.id) !== Number(movie.id));
       setUserMovies(u.id, next);
+
+      // Also remove from favorites if it's there
+      const favs = getFavorites(u.id);
+      const nextFavs = favs.filter(x => Number(x) !== Number(movie.id));
+      setFavorites(u.id, nextFavs);
+
+      // Also remove from watched if it's there
+      const watched = getWatched(u.id);
+      const nextWatched = watched.filter(x => Number(x) !== Number(movie.id));
+      setWatched(u.id, nextWatched);
+
+      // Clean up comments for this movie
+      deleteMovieComments(movie);
 
       merged = [...baseMovies, ...next];
       render(merged, options);
+      notify("Movie removed!");
     }
   };
 

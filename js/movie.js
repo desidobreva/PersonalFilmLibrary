@@ -1,4 +1,6 @@
-import { KEYS, read, write, getCurrentUser } from "./storage.js";
+import { KEYS, read, getCurrentUser } from "./storage.js";
+import { notify } from "./notify.js";
+import { getMovieComments, addMovieComment } from "./comments.js";
 
 const MOVIES_URL = "assets/data/movies.json";
 const OMDB_API_KEY = "21021edc";
@@ -109,26 +111,6 @@ function canComment(from) {
   return from === "favorites" || from === "watched";
 }
 
-function getCommentsMap() {
-  return read(KEYS.COMMENTS, {});
-}
-
-function setCommentsMap(map) {
-  write(KEYS.COMMENTS, map);
-}
-
-function getMovieComments(movieId) {
-  const map = getCommentsMap();
-  return map?.[movieId] || [];
-}
-
-function addMovieComment(movieId, comment) {
-  const map = getCommentsMap();
-  if (!map[movieId]) map[movieId] = [];
-  map[movieId].push(comment);
-  setCommentsMap(map);
-}
-
 function escapeHtml(str) {
   return String(str || "")
     .replaceAll("&", "&amp;")
@@ -205,7 +187,23 @@ async function init() {
   const user = getCurrentUser();
   const uid = user?.id ?? null;
 
-  renderComments(getMovieComments(String(id)));
+  const baseMovies = await loadBaseMovies();
+  let merged = [...baseMovies];
+
+  if (uid) {
+    merged = [...merged, ...getUserMovies(uid)];
+  }
+
+  const movie = merged.find(m => m.id === id);
+  if (!movie) {
+    if (titleEl) titleEl.textContent = "Movie not found";
+    renderMeta([{ label: "Error", value: "No movie with this id." }]);
+    setPoster(null, "No poster");
+    return;
+  }
+
+  // Load and render comments for this movie (works for both base and user movies)
+  renderComments(getMovieComments(movie));
 
   const allowForm = Boolean(uid) && canComment(from);
   if (commentPanel) commentPanel.hidden = !allowForm;
@@ -230,32 +228,21 @@ async function init() {
 
       if (!validateComment(author, text)) return;
 
-      addMovieComment(String(id), {
+      // Pass the movie object for proper key generation
+      addMovieComment(movie, {
         author,
         date: formatDateISO(new Date()),
         text: normalize(text)
       });
 
+      notify("Comment added!", "success");
+
       if (cText) cText.value = "";
       if (charCount) charCount.textContent = "0";
 
-      renderComments(getMovieComments(String(id)));
+      // Reload comments to show the new one
+      renderComments(getMovieComments(movie));
     });
-  }
-
-  const baseMovies = await loadBaseMovies();
-  let merged = [...baseMovies];
-
-  if (uid) {
-    merged = [...merged, ...getUserMovies(uid)];
-  }
-
-  const movie = merged.find(m => m.id === id);
-  if (!movie) {
-    if (titleEl) titleEl.textContent = "Movie not found";
-    renderMeta([{ label: "Error", value: "No movie with this id." }]);
-    setPoster(null, "No poster");
-    return;
   }
 
   if (titleEl) titleEl.textContent = movie.title;

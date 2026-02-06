@@ -3,10 +3,6 @@ import { KEYS, read, write, requireAuth, getCurrentUser } from "./storage.js";
 const MOVIES_URL = "assets/data/movies.json";
 const moviesContainer = document.getElementById("moviesContainer");
 
-function normalize(str) {
-  return String(str || "").trim().toLowerCase();
-}
-
 async function loadBaseMovies() {
   const res = await fetch(MOVIES_URL, { cache: "no-store" });
   if (!res.ok) throw new Error("Cannot load movies.json");
